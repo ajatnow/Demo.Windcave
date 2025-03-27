@@ -1,5 +1,4 @@
-﻿using Umbraco.Commerce.Core.Models;
-using UCommModels = Umbraco.Commerce.Core.Models;
+﻿using UCommModels = Umbraco.Commerce.Core.Models;
 
 namespace Demo.Web.Models;
 

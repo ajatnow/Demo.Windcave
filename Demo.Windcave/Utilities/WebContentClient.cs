@@ -1,10 +1,5 @@
-﻿using Azure;
-using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Pkcs;
+﻿using Newtonsoft.Json;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 
 namespace Demo.Commerce.Utility.Web
 {

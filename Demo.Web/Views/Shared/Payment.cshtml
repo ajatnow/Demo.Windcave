@@ -12,7 +12,7 @@
         {
             using (await Html.BeginPaymentFormAsync(Model.Order))
             {
-                <input type="hidden" name="FinaliseModel.OrderId" value="@Model.Order.Id" />
+                <input type="hidden" name="FinaliseModel.OrderId" value="@Model.Order!.Id" />
 
                 <!-- START VALIDATION ERRORS -->
                 <section class="section-container no-margin-bottom">
