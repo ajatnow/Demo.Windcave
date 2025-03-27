@@ -1,0 +1,88 @@
+﻿@using Demo.Web.Models
+@using UCommModels = Umbraco.Commerce.Core.Models;
+@using Umbraco.Commerce.Extensions;
+
+@model PaymentViewModel
+
+
+<!-- Payment detail -->
+<div class="PaymentDetailsContainer grid-container">
+    <div class="PaymentDetails">
+        @if (Model.HasPaymentMethod)
+        {
+            using (await Html.BeginPaymentFormAsync(Model.Order))
+            {
+                <input type="hidden" name="FinaliseModel.OrderId" value="@Model.Order.Id" />
+
+                <!-- START VALIDATION ERRORS -->
+                <section class="section-container no-margin-bottom">
+                    <div asp-validation-summary="All" class="validation-summary-errors"></div>
+                </section>
+                <!-- END VALIDATION ERRORS -->
+
+                <!-- this is where all your fields for the checkout go -->
+
+                <button type="submit" class="place-order button large fullWidth">
+                    Place order
+                </button>
+            } @* end of beginform *@
+        } @* end of has payment method *@
+        else
+        {
+            <!-- START VALIDATION ERRORS -->
+            <section class="section-container no-margin-bottom">
+                <div asp-validation-summary="All" class="validation-summary-errors">
+                    No payment method has been set for this order. Please check customer address details.
+                </div>
+            </section>
+            <!-- END VALIDATION ERRORS -->
+        }
+    </div>
+
+    <!-- Right hand column showing order line items -->
+    <div class="ProductList">
+        <div class="product-list">
+            @if (Model.HasOrderLines)
+            {
+                foreach (UCommModels.OrderLineReadOnly orderLine in Model.Order!.OrderLines!)
+                {
+                    <div class="product-item">
+                        <div class="product-details">
+                            <div class="product-image-container">
+                                <img src="@(orderLine.Properties["imgSrc"])" alt="Product image" class="product-image">
+                                <span>@((int)orderLine.Quantity)</span>
+                            </div>
+                            <span class="product-name">@orderLine.Name</span>
+                        </div>
+                        <div class="product-price-wrapper">
+                            <span class="product-price">
+                                @(orderLine.TotalPrice.WithoutAdjustments.Formatted().WithoutTax)
+                            </span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="price-summary" id="priceSummary">
+            <div class="item">
+                <div>Subtotal</div>
+                <div>@Model.Order!.SubtotalPrice.Value.Formatted().WithoutTax</div>
+            </div>
+            <div class="item">
+                <div>Shipping</div>
+                <div>@Model.Order!.ShippingInfo.TotalPrice.Value.Formatted().WithoutTax</div>
+            </div>
+            <div class="item">
+                <div>GST (Exc)</div>
+                <div>@Model.Order.TotalPrice.Value.Formatted().Tax</div>
+            </div>
+            <div class="item bold">
+                <div>Total</div>
+                <div>@Model.Order.TotalPrice.Value.Formatted().WithTax</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- /Payment detail -->
